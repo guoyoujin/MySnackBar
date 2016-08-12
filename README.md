@@ -8,6 +8,14 @@
 2. 和Snackbar的调用方法一样,同时支持duration和手势移除,移除时状态栏颜色随手势移除而变化.
 3. 提供LUtils用于操作状态栏,支持属性动画
 
+## Example
+ first add dependences
+```
+  dependencies {
+    compile 'com.trycatch.android:mydialogfragment:1.0.0'
+  }
+```
+
 ## 使用
 ```
     if (LUtils.hasKitKat()) {
