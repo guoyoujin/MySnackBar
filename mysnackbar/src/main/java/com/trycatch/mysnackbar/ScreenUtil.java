@@ -20,6 +20,8 @@ public class ScreenUtil {
 
     /**
      * 获得屏幕高度
+     *@param context
+     * @return widthPixels
      */
     public static int getScreenWidth(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -30,6 +32,8 @@ public class ScreenUtil {
 
     /**
      * 获得屏幕宽度
+     * @param context
+     * @return heightPixels
      */
     public static int getScreenHeight(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -38,11 +42,13 @@ public class ScreenUtil {
         return outMetrics.heightPixels;
     }
 
+   
+    private static int mStatusHeight = -1;
     /**
      * 获得状态栏的高度
+     * @param context
+     * @return mStatusHeight
      */
-    private static int mStatusHeight = -1;
-
     public static int getStatusHeight(Context context) {
 
         if (mStatusHeight != -1) {
@@ -71,6 +77,11 @@ public class ScreenUtil {
 
     private static int mActionBarHeight = -1;
 
+    /**
+     * 获取当前屏幕截图，包含状态栏
+     * @param context
+     * @return mActionBarHeight
+     */
     public static int getActionBarHeight(Context context) {
 
         if (mActionBarHeight != -1) {
@@ -86,6 +97,8 @@ public class ScreenUtil {
 
     /**
      * 获取当前屏幕截图，包含状态栏
+     * @param activity
+     * @return bp
      */
     public static Bitmap snapShotWithStatusBar(Activity activity) {
         View view = activity.getWindow().getDecorView();
@@ -102,6 +115,8 @@ public class ScreenUtil {
 
     /**
      * 获取当前屏幕截图，不包含状态栏
+     * @param activity
+     * @return bp
      */
     public static Bitmap snapShotWithoutStatusBar(Activity activity) {
         View view = activity.getWindow().getDecorView();
