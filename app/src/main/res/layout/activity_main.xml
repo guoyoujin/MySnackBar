@@ -9,8 +9,28 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.trycatch.mycustomsnackbar.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/success"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:onClick="onClick"
+        android:text="SUCCESS!" />
+
+    <Button
+        android:id="@+id/error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:layout_marginTop="100dp"
+        android:text="ERROR" />
+
+    <Button
+        android:id="@+id/warning"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onClick"
+        android:layout_marginTop="200dp"
+        android:text="WARNING" />
+
+
 </RelativeLayout>
