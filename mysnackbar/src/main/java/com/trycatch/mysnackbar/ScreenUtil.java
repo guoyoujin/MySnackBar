@@ -50,17 +50,10 @@ public class ScreenUtil {
      * @return mStatusHeight
      */
     public static int getStatusHeight(Context context) {
-
         if (mStatusHeight != -1) {
             return mStatusHeight;
         }
-
-
         try {
-//            Class<?> clazz = Class.forName("com.android.internal.R$dimen");
-//            Object object = clazz.newInstance();
-//            int height = Integer.parseInt(clazz.getField("status_bar_height").get(object).toString());
-//            mStatusHeight = context.getResources().getDimensionPixelSize(height);
             int resourceId = context.getResources().getIdentifier("status_bar_height", "dimen", "android");
             if (resourceId > 0) {
                 mStatusHeight = context.getResources().getDimensionPixelSize(resourceId);
@@ -73,7 +66,6 @@ public class ScreenUtil {
 
         return mStatusHeight;
     }
-
 
     private static int mActionBarHeight = -1;
 
