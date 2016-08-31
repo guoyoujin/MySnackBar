@@ -220,9 +220,17 @@ public final class TSnackbar {
                 mView.setPadding(0, ScreenUtil.getStatusHeight(mContext), 0, 0);
                 mView.setMinimumHeight(ScreenUtil.getActionBarHeight(mContext)+ScreenUtil.getStatusHeight(mContext));
             }else{
-                mView.setMinimumHeight(ScreenUtil.getActionBarHeight(mContext)+ScreenUtil.getStatusHeight(mContext));
-                mView.setPadding(0, 0, 0, 0);
+                mView.setMinimumHeight(ScreenUtil.getActionBarHeight(mContext)+15);
+                setMargins(mView,0,ScreenUtil.getStatusHeight(mContext),0,0);
             }
+        }
+    }
+
+    public static void setMargins (View v, int l, int t, int r, int b) {
+        if (v.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+            p.setMargins(l, t, r, b);
+            v.requestLayout();
         }
     }
 
@@ -313,6 +321,20 @@ public final class TSnackbar {
     public TSnackbar addIcon(int resource_id, int width, int height) {
         final TextView tv = mView.getMessageView();
         tv.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(Bitmap.createScaledBitmap(((BitmapDrawable) (mContext.getResources().getDrawable(resource_id))).getBitmap(), width, height, true)), null, null, null);
+        return this;
+    }
+
+    public TSnackbar setThemBackground(Prompt prompt) {
+        if (prompt == Prompt.SUCCESS) {
+            mView.setBackgroundColor(mContext.getResources().getColor(Prompt.SUCCESS.getBackgroundColor()));
+            mView.getMessageView().setCompoundDrawablesWithIntrinsicBounds(Prompt.SUCCESS.getResIcon(), 0, 0, 0);
+        } else if (prompt == Prompt.ERROR) {
+            mView.setBackgroundColor(mContext.getResources().getColor(Prompt.ERROR.getBackgroundColor()));
+            mView.getMessageView().setCompoundDrawablesWithIntrinsicBounds(Prompt.ERROR.getResIcon(), 0, 0, 0);
+        } else if (prompt == Prompt.WARNING) {
+            mView.setBackgroundColor(mContext.getResources().getColor(Prompt.WARNING.getBackgroundColor()));
+            mView.getMessageView().setCompoundDrawablesWithIntrinsicBounds(Prompt.WARNING.getResIcon(), 0, 0, 0);
+        }
         return this;
     }
 
