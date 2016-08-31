@@ -23,8 +23,7 @@ public class MainActivity extends AppCompatActivity {
                     snackBar.dismiss();
                 } else {
                     final ViewGroup viewGroup = (ViewGroup) findViewById(android.R.id.content).getRootView();
-                    snackBar = TSnackbar.make(viewGroup, "success...", TSnackbar.LENGTH_LONG, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
-                    snackBar.addIcon(R.mipmap.ic_launcher,100,100);
+                    snackBar = TSnackbar.make(viewGroup, "正在加载中...", TSnackbar.LENGTH_INDEFINITE, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
                     snackBar.setAction("确定", new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

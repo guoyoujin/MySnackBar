@@ -18,23 +18,63 @@
 
 ## 使用
 ```
-    if (LUtils.hasKitKat()) {
-       // 4.4机器上时设置状态栏颜色
-       LUtils.instance(this).setStatusBarColor(getResources().getColor(R.color.colorPrimaryDark));
-    }
+    public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.success:
+                    if (snackBar != null && snackBar.isShown()) {
+                        snackBar.dismiss();
+                    } else {
+                        final ViewGroup viewGroup = (ViewGroup) findViewById(android.R.id.content).getRootView();
+                        snackBar = TSnackbar.make(viewGroup, "success...", TSnackbar.LENGTH_LONG, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
+                        snackBar.addIcon(R.mipmap.ic_launcher,100,100);
+                        snackBar.setAction("确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
     
-    TSnackbar.make(v, "success", Prompt.SUCCESS).show();//成功
-    TSnackbar.make(v, "error", Prompt.ERROR, TSnackbar.LENGTH_LONG).show();//错误
-    TSnackbar.make(v, "warning", Prompt.WARNING, 500).show();//警告
+                            }
+                        });
+                        snackBar.setThemBackground(Prompt.SUCCESS);
+                        snackBar.show();
+                    }
+                    break;
+                case R.id.error:
+                    if (snackBar != null && snackBar.isShown()) {
+                        snackBar.dismiss();
+                    } else {
+                        final ViewGroup viewGroup = (ViewGroup) findViewById(android.R.id.content).getRootView();
+                        snackBar = TSnackbar.make(viewGroup, "error...", TSnackbar.LENGTH_LONG, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
+                        snackBar.addIcon(R.mipmap.ic_launcher,100,100);
+                        snackBar.setAction("确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
     
-    //也可以指定某种状态的颜色
-    Prompt.SUCCESS.setBackgroundColor(R.color.wanted_color);
+                            }
+                        });
+                        snackBar.setThemBackground(Prompt.ERROR);
+                        snackBar.show();
+                    }
+                    break;
+                case R.id.warning:
+                    if (snackBar != null && snackBar.isShown()) {
+                        snackBar.dismiss();
+                    } else {
+                        final ViewGroup viewGroup = (ViewGroup) findViewById(android.R.id.content).getRootView();
+                        snackBar = TSnackbar.make(viewGroup, "waring...", TSnackbar.LENGTH_LONG, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
+                        snackBar.addIcon(R.mipmap.ic_launcher,100,100);
+                        snackBar.setAction("确定", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+    
+                            }
+                        });
+                        snackBar.setThemBackground(Prompt.WARNING);
+                        snackBar.show();
+                    }
+                    break;
+            }
+        }
     
 ```
-
-## 注意
-   要在主Activity.onDestory()里调用LUtils.clear();避免内存泄露
-
 
 
 ## ScreenShot

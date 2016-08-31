@@ -16,11 +16,14 @@ package com.trycatch.mysnackbar;
  * limitations under the License.
  */
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
@@ -41,6 +44,7 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -326,8 +330,15 @@ public final class TSnackbar {
 
     public TSnackbar setThemBackground(Prompt prompt) {
         if (prompt == Prompt.SUCCESS) {
+            Drawable left = mContext.getResources().getDrawable(R.drawable.rotate);
+            final ObjectAnimator animator = ObjectAnimator.ofInt(left, "level", 0, 10000);
+            animator.setDuration(1000);
+            animator.setInterpolator(new LinearInterpolator());
+            animator.setRepeatCount(ValueAnimator.INFINITE);
+            animator.setRepeatMode(ValueAnimator.INFINITE);
             mView.setBackgroundColor(mContext.getResources().getColor(Prompt.SUCCESS.getBackgroundColor()));
-            mView.getMessageView().setCompoundDrawablesWithIntrinsicBounds(Prompt.SUCCESS.getResIcon(), 0, 0, 0);
+            mView.getMessageView().setCompoundDrawablesWithIntrinsicBounds(left, null, null, null);
+            animator.start();
         } else if (prompt == Prompt.ERROR) {
             mView.setBackgroundColor(mContext.getResources().getColor(Prompt.ERROR.getBackgroundColor()));
             mView.getMessageView().setCompoundDrawablesWithIntrinsicBounds(Prompt.ERROR.getResIcon(), 0, 0, 0);
