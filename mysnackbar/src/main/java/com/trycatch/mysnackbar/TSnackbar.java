@@ -21,6 +21,7 @@ import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
@@ -33,7 +34,6 @@ import android.support.design.widget.SwipeDismissBehavior;
 import android.support.v4.view.ViewCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -50,8 +50,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * OverSnackBar provides lightweight feedback about an operation. They show a brief message at the
- * top of the screen on mobile. OverSnackBars appear above all other
+ * TSnackbar provides lightweight feedback about an operation. They show a brief message at the
+ * top of the screen on mobile. TSnackbar appear above all other
  * elements on screen and only one can be displayed at a time.
  * <p>
  * They automatically disappear after a timeout or after user interaction elsewhere on the screen,
@@ -73,23 +73,23 @@ public final class TSnackbar {
      */
     public static abstract class Callback {
         /**
-         * Indicates that the OverSnackBar was dismissed via a swipe.
+         * Indicates that the TSnackbar was dismissed via a swipe.
          */
         public static final int DISMISS_EVENT_SWIPE = 0;
         /**
-         * Indicates that the OverSnackBar was dismissed via an action click.
+         * Indicates that the TSnackbar was dismissed via an action click.
          */
         public static final int DISMISS_EVENT_ACTION = 1;
         /**
-         * Indicates that the OverSnackBar was dismissed via a timeout.
+         * Indicates that the TSnackbar was dismissed via a timeout.
          */
         public static final int DISMISS_EVENT_TIMEOUT = 2;
         /**
-         * Indicates that the OverSnackBar was dismissed via a call to {@link #dismiss()}.
+         * Indicates that the TSnackbar was dismissed via a call to {@link #dismiss()}.
          */
         public static final int DISMISS_EVENT_MANUAL = 3;
         /**
-         * Indicates that the OverSnackBar was dismissed from a new Snackbar being shown.
+         * Indicates that the TSnackbar was dismissed from a new Snackbar being shown.
          */
         public static final int DISMISS_EVENT_CONSECUTIVE = 4;
 
@@ -104,23 +104,23 @@ public final class TSnackbar {
          * Called when the given {@link TSnackbar} has been dismissed, either through a time-out,
          * having been manually dismissed, or an action being clicked.
          *
-         * @param OverSnackBar The snackbar which has been dismissed.
+         * @param TSnackbar The snackbar which has been dismissed.
          * @param event        The event which caused the dismissal. One of either:
          *                     {@link #DISMISS_EVENT_SWIPE}, {@link #DISMISS_EVENT_ACTION},
          *                     {@link #DISMISS_EVENT_TIMEOUT}, {@link #DISMISS_EVENT_MANUAL} or
          *                     {@link #DISMISS_EVENT_CONSECUTIVE}.
          * @see TSnackbar#dismiss()
          */
-        public void onDismissed(TSnackbar OverSnackBar, @DismissEvent int event) {
+        public void onDismissed(TSnackbar TSnackbar, @DismissEvent int event) {
         }
 
         /**
          * Called when the given {@link TSnackbar} is visible.
          *
-         * @param OverSnackBar The snackbar which is now visible.
+         * @param TSnackbar The snackbar which is now visible.
          * @see TSnackbar#show()
          */
-        public void onShown(TSnackbar OverSnackBar) {
+        public void onShown(TSnackbar TSnackbar) {
 
         }
     }
@@ -131,12 +131,12 @@ public final class TSnackbar {
     }
 
     /**
-     * Show the OverSnackBar from top to down.
+     * Show the TSnackbar from top to down.
      */
     public static final int APPEAR_FROM_TOP_TO_DOWN = 0;
 
     /**
-     * Show the OverSnackBar from top to down.
+     * Show the TSnackbar from top to down.
      */
     public static final int APPEAR_FROM_BOTTOM_TO_TOP = 1;
 
@@ -146,22 +146,22 @@ public final class TSnackbar {
     }
 
     /**
-     * Show the OverSnackBar indefinitely. This means that the OverSnackBar will be displayed from the time
-     * that is {@link #show() shown} until either it is dismissed, or another OverSnackBar is shown.
+     * Show the TSnackbar indefinitely. This means that the TSnackbar will be displayed from the time
+     * that is {@link #show() shown} until either it is dismissed, or another TSnackbar is shown.
      *
      * @see #setDuration
      */
     public static final int LENGTH_INDEFINITE = -2;
 
     /**
-     * Show the OverSnackBar for a short period of time.
+     * Show the TSnackbar for a short period of time.
      *
      * @see #setDuration
      */
     public static final int LENGTH_SHORT = -1;
 
     /**
-     * Show the OverSnackBar for a long period of time.
+     * Show the TSnackbar for a long period of time.
      *
      * @see #setDuration
      */
@@ -208,7 +208,7 @@ public final class TSnackbar {
         mContext = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(mContext);
 
-        mView = (SnackbarLayout) inflater.inflate(R.layout.view_oversnackbar_layout, mParent, false);
+        mView = (SnackbarLayout) inflater.inflate(R.layout.view_tsnackbar_layout, mParent, false);
     }
 
     private TSnackbar(ViewGroup parent, @OverSnackAppearDirection int appearDirection) {
@@ -216,20 +216,25 @@ public final class TSnackbar {
         this.appearDirection = appearDirection;
 
         if(appearDirection == APPEAR_FROM_TOP_TO_DOWN) {
-            mView.setPadding(0, ScreenUtil.getStatusHeight(mContext), 0, 0);
-            mView.setMinimumHeight(ScreenUtil.getActionBarHeight(mContext)+ScreenUtil.getStatusHeight(mContext));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                mView.setPadding(0, ScreenUtil.getStatusHeight(mContext), 0, 0);
+                mView.setMinimumHeight(ScreenUtil.getActionBarHeight(mContext)+ScreenUtil.getStatusHeight(mContext));
+            }else{
+                mView.setMinimumHeight(ScreenUtil.getActionBarHeight(mContext)+ScreenUtil.getStatusHeight(mContext));
+                mView.setPadding(0, 0, 0, 0);
+            }
         }
     }
 
     /**
-     * Make a OverSnackBar to display a message
+     * Make a TSnackbar to display a message
      * <p/>
-     * <p>OverSnackBar will try and find a parent view to hold OverSnackBar's view from the value given
+     * <p>TSnackbar will try and find a parent view to hold TSnackbar's view from the value given
      * to {@code view}. Snackbar will walk up the view tree trying to find a suitable parent,
      * which is defined as a {@link CoordinatorLayout} or the window decor's content view,
      * whichever comes first.
      * <p/>
-     * <p>Having a {@link CoordinatorLayout} in your view hierarchy allows OverSnackBar to enable
+     * <p>Having a {@link CoordinatorLayout} in your view hierarchy allows TSnackbar to enable
      * certain features, such as swipe-to-dismiss and automatically moving of widgets like
      * {@link FloatingActionButton}.
      *
@@ -240,29 +245,29 @@ public final class TSnackbar {
      */
     @NonNull
     public static TSnackbar make(@NonNull View view, @NonNull CharSequence text, @Duration int duration) {
-        TSnackbar overSnackBar = new TSnackbar(findSuitableParent(view), APPEAR_FROM_TOP_TO_DOWN);
-        overSnackBar.setText(text);
-        overSnackBar.setDuration(duration);
-        return overSnackBar;
+        TSnackbar tSnackbar = new TSnackbar(findSuitableParent(view), APPEAR_FROM_TOP_TO_DOWN);
+        tSnackbar.setText(text);
+        tSnackbar.setDuration(duration);
+        return tSnackbar;
     }
 
     @NonNull
     public static TSnackbar make(@NonNull View view, @NonNull CharSequence text, @Duration int duration, @OverSnackAppearDirection int appearDirection) {
-        TSnackbar overSnackBar = new TSnackbar(findSuitableParent(view), appearDirection);
-        overSnackBar.setText(text);
-        overSnackBar.setDuration(duration);
-        return overSnackBar;
+        TSnackbar tSnackbar = new TSnackbar(findSuitableParent(view), appearDirection);
+        tSnackbar.setText(text);
+        tSnackbar.setDuration(duration);
+        return tSnackbar;
     }
 
     /**
-     * Make a OverSnackBar to display a message.
+     * Make a TSnackbar to display a message.
      * <p/>
-     * <p>OverSnackBar will try and find a parent view to hold OverSnackBar's view from the value given
-     * to {@code view}. OverSnackBar will walk up the view tree trying to find a suitable parent,
+     * <p>TSnackbar will try and find a parent view to hold TSnackbar's view from the value given
+     * to {@code view}. TSnackbar will walk up the view tree trying to find a suitable parent,
      * which is defined as a {@link CoordinatorLayout} or the window decor's content view,
      * whichever comes first.
      * <p/>
-     * <p>Having a {@link CoordinatorLayout} in your view hierarchy allows OverSnackBar to enable
+     * <p>Having a {@link CoordinatorLayout} in your view hierarchy allows TSnackbar to enable
      * certain features, such as swipe-to-dismiss and automatically moving of widgets like
      * {@link FloatingActionButton}.
      *
@@ -668,7 +673,7 @@ public final class TSnackbar {
             // Now inflate our content. We need to do this manually rather than using an <include>
             // in the layout since older versions of the Android do not inflate includes with
             // the correct Context.
-            LayoutInflater.from(context).inflate(R.layout.view_oversnackbar_layout_include, this);
+            LayoutInflater.from(context).inflate(R.layout.view_tsnackbar_layout_include, this);
         }
 
         @Override
@@ -780,8 +785,8 @@ public final class TSnackbar {
     final class Behavior extends SwipeDismissBehavior<SnackbarLayout> {
         @Override
         public boolean onInterceptTouchEvent(CoordinatorLayout parent, SnackbarLayout child, MotionEvent event) {
-            // We want to make sure that we disable any OverSnackBar timeouts if the user is
-            // currently touching the OverSnackBar. We restore the timeout when complete
+            // We want to make sure that we disable any TSnackbar timeouts if the user is
+            // currently touching the TSnackbar. We restore the timeout when complete
             if (parent.isPointInChildBounds(child, (int) event.getX(), (int) event.getY())) {
                 switch (event.getActionMasked()) {
                     case MotionEvent.ACTION_DOWN:
