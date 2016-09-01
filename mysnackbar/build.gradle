@@ -30,7 +30,7 @@ dependencies {
 }
 // 这个version是区分library版本的，因此当我们需要更新library时记得修改这个version
 // 这个version影响后面的引用
-version = "1.1.0"
+version = "1.1.1"
 def siteUrl = 'https://github.com/guoyoujin/MySnackBar'      // 项目的主页
 def gitUrl = 'https://github.com/guoyoujin/MySnackBar.git'   // Git仓库的url
 group = "com.trycatch.android"                                        // Maven Group ID for the artifact，一般填你唯一的包名

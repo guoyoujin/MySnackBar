@@ -16,6 +16,7 @@ package com.trycatch.mysnackbar;
  * limitations under the License.
  */
 
+import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
@@ -325,17 +326,52 @@ public final class TSnackbar {
         return this;
     }
 
+    public TSnackbar addIconProgressLoading(int resource_id,boolean left,boolean right) {
+        Drawable drawable = mContext.getResources().getDrawable(R.drawable.rotate);
+        if(resource_id>0 ){
+            drawable = mContext.getResources().getDrawable(resource_id);
+        }
+        final ObjectAnimator animator = ObjectAnimator.ofInt(drawable, "level", 0, 10000);
+        animator.setDuration(1000);
+        animator.setInterpolator(new LinearInterpolator());
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.setRepeatMode(ValueAnimator.INFINITE);
+        mView.setBackgroundColor(mContext.getResources().getColor(Prompt.SUCCESS.getBackgroundColor()));
+        if(left){
+            mView.getMessageView().setCompoundDrawablesWithIntrinsicBounds(drawable, null, null, null);
+        }
+        if(right){
+            mView.getMessageView().setCompoundDrawablesWithIntrinsicBounds(null, null, drawable, null);
+        }
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+
+            }
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (mCallback != null) {
+                    mCallback.onShown(TSnackbar.this);
+                }
+                SnackbarManager.getInstance().onShown(mManagerCallback);
+            }
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
+        animator.start();
+        return this;
+    }
+
     public TSnackbar setThemBackground(Prompt prompt) {
         if (prompt == Prompt.SUCCESS) {
-            Drawable left = mContext.getResources().getDrawable(R.drawable.rotate);
-            final ObjectAnimator animator = ObjectAnimator.ofInt(left, "level", 0, 10000);
-            animator.setDuration(1000);
-            animator.setInterpolator(new LinearInterpolator());
-            animator.setRepeatCount(ValueAnimator.INFINITE);
-            animator.setRepeatMode(ValueAnimator.INFINITE);
             mView.setBackgroundColor(mContext.getResources().getColor(Prompt.SUCCESS.getBackgroundColor()));
-            mView.getMessageView().setCompoundDrawablesWithIntrinsicBounds(left, null, null, null);
-            animator.start();
+            mView.getMessageView().setCompoundDrawablesWithIntrinsicBounds(Prompt.SUCCESS.getResIcon(), 0, 0, 0);
         } else if (prompt == Prompt.ERROR) {
             mView.setBackgroundColor(mContext.getResources().getColor(Prompt.ERROR.getBackgroundColor()));
             mView.getMessageView().setCompoundDrawablesWithIntrinsicBounds(Prompt.ERROR.getResIcon(), 0, 0, 0);
