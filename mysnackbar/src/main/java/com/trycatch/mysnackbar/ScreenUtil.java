@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.View;
@@ -114,7 +113,7 @@ public class ScreenUtil {
      * @return
      */
     public static int getActionBarHeight(Context context) {
-        int actionBarHeight = ((AppCompatActivity) context).getSupportActionBar().getHeight();
+        int actionBarHeight = ((Activity) context).getActionBar().getHeight();
         if (actionBarHeight != 0)
             return actionBarHeight;
         final TypedValue tv = new TypedValue();
