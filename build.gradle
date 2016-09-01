@@ -19,6 +19,7 @@ allprojects {
         jcenter()
         mavenCentral()
     }
+    tasks.withType(Javadoc).all { enabled = false }
 }
 
 task clean(type: Delete) {
