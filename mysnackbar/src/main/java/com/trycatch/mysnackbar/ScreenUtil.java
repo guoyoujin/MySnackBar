@@ -113,7 +113,10 @@ public class ScreenUtil {
      * @return
      */
     public static int getActionBarHeight(Context context) {
-        int actionBarHeight = ((Activity) context).getActionBar().getHeight();
+        int actionBarHeight=0;
+        if(((Activity) context).getActionBar()!=null){
+            actionBarHeight = ((Activity) context).getActionBar().getHeight();
+        }
         if (actionBarHeight != 0)
             return actionBarHeight;
         final TypedValue tv = new TypedValue();
