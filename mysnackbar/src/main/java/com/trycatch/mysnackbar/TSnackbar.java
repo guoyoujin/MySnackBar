@@ -18,6 +18,7 @@ package com.trycatch.mysnackbar;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
@@ -35,8 +36,12 @@ import android.support.annotation.StringRes;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.SwipeDismissBehavior;
 import android.support.v4.view.ViewCompat;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -218,25 +223,17 @@ public final class TSnackbar {
     private TSnackbar(ViewGroup parent, @OverSnackAppearDirection int appearDirection) {
         this(parent);
         this.appearDirection = appearDirection;
-
         if(appearDirection == APPEAR_FROM_TOP_TO_DOWN) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                 mView.setPadding(0, ScreenUtil.getStatusHeight(mContext), 0, 0);
                 mView.setMinimumHeight(ScreenUtil.getActionBarHeight(mContext)+ScreenUtil.getStatusHeight(mContext));
             }else{
-                mView.setMinimumHeight(ScreenUtil.getActionBarHeight(mContext)+15);
-                setMargins(mView,0,ScreenUtil.getStatusHeight(mContext),0,0);
+                mView.setMinimumHeight(ScreenUtil.getActionBarHeight(mContext));
+                ScreenUtil.setMargins(mView,0,ScreenUtil.getStatusHeight(mContext),0,0);
             }
         }
     }
-
-    public static void setMargins (View v, int l, int t, int r, int b) {
-        if (v.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
-            p.setMargins(l, t, r, b);
-            v.requestLayout();
-        }
-    }
+    
 
     /**
      * Make a TSnackbar to display a message

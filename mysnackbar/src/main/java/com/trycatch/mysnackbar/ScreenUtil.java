@@ -2,11 +2,14 @@ package com.trycatch.mysnackbar;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
+import android.os.Build;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 
 /**
@@ -58,33 +61,10 @@ public class ScreenUtil {
             if (resourceId > 0) {
                 mStatusHeight = context.getResources().getDimensionPixelSize(resourceId);
             }
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return mStatusHeight;
-    }
-
-    private static int mActionBarHeight = -1;
-
-    /**
-     * 获取当前屏幕截图，包含状态栏
-     * @param context
-     * @return mActionBarHeight
-     */
-    public static int getActionBarHeight(Context context) {
-
-        if (mActionBarHeight != -1) {
-            return mActionBarHeight;
-        }
-
-        TypedArray typedArray = context.obtainStyledAttributes(new int[]{android.R.attr.actionBarSize});
-        mActionBarHeight = (int) typedArray.getDimension(0, 0);
-        typedArray.recycle();
-
-        return mActionBarHeight;
     }
 
     /**
@@ -114,12 +94,10 @@ public class ScreenUtil {
         View view = activity.getWindow().getDecorView();
         view.setDrawingCacheEnabled(true);
         view.buildDrawingCache();
-
         Bitmap bmp = view.getDrawingCache();
         if (bmp == null) {
             return null;
         }
-
         Rect frame = new Rect();
         activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
         int statusBarHeight = frame.top;
@@ -128,5 +106,43 @@ public class ScreenUtil {
         view.setDrawingCacheEnabled(false);
 
         return bp;
+    }
+
+    /**
+     * 获取actionbar的像素高度，默认使用android官方兼容包做actionbar兼容 
+     *
+     * @return
+     */
+    public static int getActionBarHeight(Context context) {
+        int actionBarHeight = ((AppCompatActivity) context).getSupportActionBar().getHeight();
+        if (actionBarHeight != 0)
+            return actionBarHeight;
+        final TypedValue tv = new TypedValue();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            if (((Activity) context).getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
+                actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, context.getResources().getDisplayMetrics());
+        }
+        else {
+            if (((Activity) context).getTheme().resolveAttribute(android.support.v7.appcompat.R.attr.actionBarSize, tv, true))
+                actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, context.getResources().getDisplayMetrics());
+        }
+        return actionBarHeight;
+    }
+
+
+    /**
+     * 设置view margin
+     * @param v
+     * @param l
+     * @param t
+     * @param r
+     * @param b
+     */
+    public static void setMargins (View v, int l, int t, int r, int b) {
+        if (v.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
+            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
+            p.setMargins(l, t, r, b);
+            v.requestLayout();
+        }
     }
 }
