@@ -16,7 +16,7 @@
   }
 ```
 
-## 使用
+## use
 ```
     public class MainActivity extends AppCompatActivity {
         private TSnackbar snackBar;

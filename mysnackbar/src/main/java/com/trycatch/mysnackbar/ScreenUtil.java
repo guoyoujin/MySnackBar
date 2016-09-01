@@ -5,7 +5,9 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Build;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -114,18 +116,21 @@ public class ScreenUtil {
      */
     public static int getActionBarHeight(Context context) {
         int actionBarHeight=0;
-        if(((Activity) context).getActionBar()!=null){
+        if(((AppCompatActivity) context).getSupportActionBar()!=null)
+            actionBarHeight = ((AppCompatActivity) context).getSupportActionBar().getHeight();
+        if(((Activity) context).getActionBar()!=null)
             actionBarHeight = ((Activity) context).getActionBar().getHeight();
-        }
         if (actionBarHeight != 0)
             return actionBarHeight;
         final TypedValue tv = new TypedValue();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            if (((Activity) context).getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
+        if(context.getTheme().resolveAttribute( android.support.v7.appcompat.R.attr.actionBarSize, tv, true)){
+            if (((AppCompatActivity) context).getTheme().resolveAttribute(android.support.v7.appcompat.R.attr.actionBarSize, tv, true))
                 actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, context.getResources().getDisplayMetrics());
-        }
-        else {
-            if (((Activity) context).getTheme().resolveAttribute(android.support.v7.appcompat.R.attr.actionBarSize, tv, true))
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            if (((AppCompatActivity) context).getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
+                actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, context.getResources().getDisplayMetrics());
+        }else {
+            if (((AppCompatActivity) context).getTheme().resolveAttribute(android.support.v7.appcompat.R.attr.actionBarSize, tv, true))
                 actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, context.getResources().getDisplayMetrics());
         }
         return actionBarHeight;
