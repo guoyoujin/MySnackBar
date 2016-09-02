@@ -322,6 +322,17 @@ public final class TSnackbar {
 
     /**
      * 
+     * @param resource_id
+     * @return
+     */
+    public TSnackbar addIcon(int resource_id) {
+        final TextView tv = mView.getMessageView();
+        tv.setCompoundDrawablesWithIntrinsicBounds(mContext.getResources().getDrawable(resource_id), null, null, null);
+        return this;
+    }
+
+    /**
+     * 
      * @param resource_id image id
      * @param width image width
      * @param height image height
@@ -329,7 +340,11 @@ public final class TSnackbar {
      */
     public TSnackbar addIcon(int resource_id, int width, int height) {
         final TextView tv = mView.getMessageView();
-        tv.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(Bitmap.createScaledBitmap(((BitmapDrawable) (mContext.getResources().getDrawable(resource_id))).getBitmap(), width, height, true)), null, null, null);
+        if(width>0 || height>0){
+            tv.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(Bitmap.createScaledBitmap(((BitmapDrawable) (mContext.getResources().getDrawable(resource_id))).getBitmap(), width, height, true)), null, null, null);
+        }else{
+            addIcon(resource_id);
+        }
         return this;
     }
 
@@ -345,6 +360,18 @@ public final class TSnackbar {
         if(resource_id>0 ){
             drawable = mContext.getResources().getDrawable(resource_id);
         }
+        addIconProgressLoading(drawable,left,right);
+        return this;
+    }
+
+    /**
+     * 
+     * @param drawable
+     * @param left
+     * @param right
+     * @return
+     */
+    public TSnackbar addIconProgressLoading(Drawable drawable,boolean left,boolean right) {
         final ObjectAnimator animator = ObjectAnimator.ofInt(drawable, "level", 0, 10000);
         animator.setDuration(1000);
         animator.setInterpolator(new LinearInterpolator());
@@ -382,22 +409,33 @@ public final class TSnackbar {
         return this;
     }
 
+
     /**
      * default style {ERROR , WARNING , SUCCESS}
      * @param prompt
      * @return
      */
-    public TSnackbar setThemBackground(Prompt prompt) {
+    public TSnackbar setPromptThemBackground(Prompt prompt) {
         if (prompt == Prompt.SUCCESS) {
-            mView.setBackgroundColor(mContext.getResources().getColor(Prompt.SUCCESS.getBackgroundColor()));
-            mView.getMessageView().setCompoundDrawablesWithIntrinsicBounds(Prompt.SUCCESS.getResIcon(), 0, 0, 0);
+            setBackgroundColor(mContext.getResources().getColor(Prompt.SUCCESS.getBackgroundColor()));
+            addIcon(Prompt.SUCCESS.getResIcon(), 0, 0);
         } else if (prompt == Prompt.ERROR) {
-            mView.setBackgroundColor(mContext.getResources().getColor(Prompt.ERROR.getBackgroundColor()));
-            mView.getMessageView().setCompoundDrawablesWithIntrinsicBounds(Prompt.ERROR.getResIcon(), 0, 0, 0);
+            setBackgroundColor(mContext.getResources().getColor(Prompt.ERROR.getBackgroundColor()));
+            addIcon(Prompt.ERROR.getResIcon(), 0, 0);
         } else if (prompt == Prompt.WARNING) {
-            mView.setBackgroundColor(mContext.getResources().getColor(Prompt.WARNING.getBackgroundColor()));
-            mView.getMessageView().setCompoundDrawablesWithIntrinsicBounds(Prompt.WARNING.getResIcon(), 0, 0, 0);
+            setBackgroundColor(mContext.getResources().getColor(Prompt.WARNING.getBackgroundColor()));
+            addIcon(Prompt.WARNING.getResIcon(), 0, 0);
         }
+        return this;
+    }
+
+    /**
+     * 
+     * @param colorId
+     * @return
+     */
+    public TSnackbar setBackgroundColor(int colorId) {
+        mView.setBackgroundColor(colorId);
         return this;
     }
 

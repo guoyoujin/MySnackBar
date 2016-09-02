@@ -1,11 +1,8 @@
 package com.trycatch.mycustomsnackbar;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.trycatch.mysnackbar.Prompt;
 import com.trycatch.mysnackbar.TSnackbar;
@@ -28,7 +25,7 @@ public class MainActivity extends BaseActivity {
 
                     }
                 });
-                snackBar.setThemBackground(Prompt.SUCCESS);
+                snackBar.setPromptThemBackground(Prompt.SUCCESS);
                 snackBar.addIconProgressLoading(0,true,false);
                 snackBar.show();
                 break;
@@ -41,7 +38,7 @@ public class MainActivity extends BaseActivity {
 
                     }
                 });
-                snackBar.setThemBackground(Prompt.ERROR);
+                snackBar.setPromptThemBackground(Prompt.ERROR);
                 snackBar.show();
                 break;
             case R.id.warning:
@@ -53,7 +50,7 @@ public class MainActivity extends BaseActivity {
 
                     }
                 });
-                snackBar.setThemBackground(Prompt.WARNING);
+                snackBar.setPromptThemBackground(Prompt.WARNING);
                 snackBar.show();
                 break;
         }
