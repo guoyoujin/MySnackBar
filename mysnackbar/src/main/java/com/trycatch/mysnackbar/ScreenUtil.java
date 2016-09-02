@@ -1,6 +1,7 @@
 package com.trycatch.mysnackbar;
 
 import android.app.Activity;
+import android.app.ActivityGroup;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Rect;
@@ -119,10 +120,16 @@ public class ScreenUtil {
         if(context instanceof AppCompatActivity  &&((AppCompatActivity) context).getSupportActionBar()!=null) {
             Log.d("isAppCompatActivity", "==AppCompatActivity");
             actionBarHeight = ((AppCompatActivity) context).getSupportActionBar().getHeight();
-        }
-        if(context instanceof Activity && ((Activity) context).getActionBar()!=null) {
+        }else if(context instanceof Activity && ((Activity) context).getActionBar()!=null) {
             Log.d("isActivity","==Activity");
             actionBarHeight = ((Activity) context).getActionBar().getHeight();
+        }else if(context instanceof ActivityGroup){
+            Log.d("ActivityGroup","==ActivityGroup");
+            if (((ActivityGroup) context).getCurrentActivity() instanceof AppCompatActivity && ((AppCompatActivity) ((ActivityGroup) context).getCurrentActivity()).getSupportActionBar()!=null){
+                actionBarHeight = ((AppCompatActivity) ((ActivityGroup) context).getCurrentActivity()).getSupportActionBar().getHeight();
+            }else if (((ActivityGroup) context).getCurrentActivity() instanceof Activity && ((Activity) ((ActivityGroup) context).getCurrentActivity()).getActionBar()!=null){
+                actionBarHeight = ((Activity) ((ActivityGroup) context).getCurrentActivity()).getActionBar().getHeight();
+            }
         }
         if (actionBarHeight != 0)
             return actionBarHeight;
