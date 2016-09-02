@@ -116,10 +116,14 @@ public class ScreenUtil {
      */
     public static int getActionBarHeight(Context context) {
         int actionBarHeight=0;
-        if(((AppCompatActivity) context).getSupportActionBar()!=null)
+        if(context instanceof AppCompatActivity  &&((AppCompatActivity) context).getSupportActionBar()!=null) {
+            Log.d("isAppCompatActivity", "==AppCompatActivity");
             actionBarHeight = ((AppCompatActivity) context).getSupportActionBar().getHeight();
-        if(((Activity) context).getActionBar()!=null)
+        }
+        if(context instanceof Activity && ((Activity) context).getActionBar()!=null) {
+            Log.d("isActivity","==Activity");
             actionBarHeight = ((Activity) context).getActionBar().getHeight();
+        }
         if (actionBarHeight != 0)
             return actionBarHeight;
         final TypedValue tv = new TypedValue();
@@ -133,6 +137,7 @@ public class ScreenUtil {
             if (((AppCompatActivity) context).getTheme().resolveAttribute(android.support.v7.appcompat.R.attr.actionBarSize, tv, true))
                 actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, context.getResources().getDisplayMetrics());
         }
+        Log.d("actionBarHeight","===="+actionBarHeight);
         return actionBarHeight;
     }
 
