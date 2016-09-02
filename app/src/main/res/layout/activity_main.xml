@@ -17,14 +17,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onClick"
+            android:layout_marginTop="20dp"
             android:text="SUCCESS!" />
+        <Button
+            android:id="@+id/loginSuccess"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:layout_marginTop="20dp"
+            android:text="LOGIN SUCCESS!" />
+        <Button
+            android:id="@+id/loginFail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"
+            android:layout_marginTop="20dp"
+            android:text="LOGIN FAIL!" />
 
         <Button
             android:id="@+id/error"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onClick"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="20dp"
             android:text="ERROR" />
 
         <Button
@@ -32,7 +47,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="onClick"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="20dp"
             android:text="WARNING" />
     </LinearLayout>
 </RelativeLayout>
