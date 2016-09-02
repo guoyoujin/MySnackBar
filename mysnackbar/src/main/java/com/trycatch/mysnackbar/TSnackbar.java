@@ -225,13 +225,7 @@ public final class TSnackbar {
         this(parent);
         this.appearDirection = appearDirection;
         if(appearDirection == APPEAR_FROM_TOP_TO_DOWN) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                mView.setPadding(0, ScreenUtil.getStatusHeight(mContext), 0, 0);
-                mView.setMinimumHeight(ScreenUtil.getActionBarHeight(mContext)+ScreenUtil.getStatusHeight(mContext));
-            }else{
-                mView.setMinimumHeight(ScreenUtil.getActionBarHeight(mContext));
-                ScreenUtil.setMargins(mView,0,ScreenUtil.getStatusHeight(mContext),0,0);
-            }
+            setMinHeight(0,0);
         }
     }
 
@@ -244,11 +238,21 @@ public final class TSnackbar {
     public TSnackbar setMinHeight(int stateBarHeight,int actionBarHeight){
         if(appearDirection == APPEAR_FROM_TOP_TO_DOWN) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                mView.setPadding(0, stateBarHeight, 0, 0);
-                mView.setMinimumHeight(stateBarHeight+actionBarHeight);
+                if(stateBarHeight>0 || actionBarHeight>0){
+                    mView.setPadding(0, stateBarHeight, 0, 0);
+                    mView.setMinimumHeight(stateBarHeight+actionBarHeight);
+                }else{
+                    mView.setPadding(0, ScreenUtil.getStatusHeight(mContext), 0, 0);
+                    mView.setMinimumHeight(ScreenUtil.getActionBarHeight(mContext)+ScreenUtil.getStatusHeight(mContext));
+                }
             }else{
-                mView.setMinimumHeight(actionBarHeight);
-                ScreenUtil.setMargins(mView,0,stateBarHeight,0,0);
+                if(stateBarHeight>0 || actionBarHeight>0){
+                    mView.setMinimumHeight(actionBarHeight);
+                    ScreenUtil.setMargins(mView,0,stateBarHeight,0,0);
+                }else{
+                    mView.setMinimumHeight(ScreenUtil.getActionBarHeight(mContext));
+                    ScreenUtil.setMargins(mView,0,ScreenUtil.getStatusHeight(mContext),0,0);
+                }
             }
         }
         return this;
