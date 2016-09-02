@@ -128,13 +128,13 @@ public class ScreenUtil {
             return actionBarHeight;
         final TypedValue tv = new TypedValue();
         if(context.getTheme().resolveAttribute( android.support.v7.appcompat.R.attr.actionBarSize, tv, true)){
-            if (((AppCompatActivity) context).getTheme().resolveAttribute(android.support.v7.appcompat.R.attr.actionBarSize, tv, true))
+            if (((Activity) context).getTheme().resolveAttribute(android.support.v7.appcompat.R.attr.actionBarSize, tv, true))
                 actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, context.getResources().getDisplayMetrics());
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            if (((AppCompatActivity) context).getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
+            if (((Activity) context).getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
                 actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, context.getResources().getDisplayMetrics());
         }else {
-            if (((AppCompatActivity) context).getTheme().resolveAttribute(android.support.v7.appcompat.R.attr.actionBarSize, tv, true))
+            if (((Activity) context).getTheme().resolveAttribute(android.support.v7.appcompat.R.attr.actionBarSize, tv, true))
                 actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, context.getResources().getDisplayMetrics());
         }
         Log.d("actionBarHeight","===="+actionBarHeight);
