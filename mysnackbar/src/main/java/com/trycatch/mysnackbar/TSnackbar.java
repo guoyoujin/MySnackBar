@@ -320,12 +320,26 @@ public final class TSnackbar {
     }
 
 
+    /**
+     * 
+     * @param resource_id image id
+     * @param width image width
+     * @param height image height
+     * @return
+     */
     public TSnackbar addIcon(int resource_id, int width, int height) {
         final TextView tv = mView.getMessageView();
         tv.setCompoundDrawablesWithIntrinsicBounds(new BitmapDrawable(Bitmap.createScaledBitmap(((BitmapDrawable) (mContext.getResources().getDrawable(resource_id))).getBitmap(), width, height, true)), null, null, null);
         return this;
     }
 
+    /**
+     * show loading progressBar
+     * @param resource_id image id
+     * @param left show textview left
+     * @param right show textview right
+     * @return TSnackbar
+     */
     public TSnackbar addIconProgressLoading(int resource_id,boolean left,boolean right) {
         Drawable drawable = mContext.getResources().getDrawable(R.drawable.rotate);
         if(resource_id>0 ){
@@ -368,6 +382,11 @@ public final class TSnackbar {
         return this;
     }
 
+    /**
+     * default style {ERROR , WARNING , SUCCESS}
+     * @param prompt
+     * @return
+     */
     public TSnackbar setThemBackground(Prompt prompt) {
         if (prompt == Prompt.SUCCESS) {
             mView.setBackgroundColor(mContext.getResources().getColor(Prompt.SUCCESS.getBackgroundColor()));
