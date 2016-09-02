@@ -234,6 +234,25 @@ public final class TSnackbar {
             }
         }
     }
+
+    /**
+     * 
+     * @param stateBarHeight
+     * @param actionBarHeight
+     * @return
+     */
+    public TSnackbar setMinHeight(int stateBarHeight,int actionBarHeight){
+        if(appearDirection == APPEAR_FROM_TOP_TO_DOWN) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                mView.setPadding(0, stateBarHeight, 0, 0);
+                mView.setMinimumHeight(stateBarHeight+actionBarHeight);
+            }else{
+                mView.setMinimumHeight(actionBarHeight);
+                ScreenUtil.setMargins(mView,0,stateBarHeight,0,0);
+            }
+        }
+        return this;
+    }
     
 
     /**
