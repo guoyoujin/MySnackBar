@@ -138,7 +138,7 @@
 
 ## ScreenShot
 5.0之上<br>
-![TSnackbar](images/show.gif "5.0 sample")
+![TSnackbar](images/1472788270138.gif "5.0 sample")
 ![TSnackbar](images/SnackbarL.gif "5.0 sample")
 <br>4.4<br>
 ![TSnackbar](images/SnackbarK.gif "4.4 sample")
