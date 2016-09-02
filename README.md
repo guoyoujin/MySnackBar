@@ -3,11 +3,6 @@
 提供三种信息: SUCCESS,WARNING,ERROR
 
 
-## 特点
-1. 状态栏颜色处理兼容到4.4;在4.4上需要添加values-v19
-2. 和Snackbar的调用方法一样,同时支持duration和手势移除,移除时状态栏颜色随手势移除而变化.
-3. 提供LUtils用于操作状态栏,支持属性动画
-
 ## Example
  first add dependences
 ```
@@ -143,6 +138,7 @@
 
 ## ScreenShot
 5.0之上<br>
+![TSnackbar](images/show.gif "5.0 sample")
 ![TSnackbar](images/SnackbarL.gif "5.0 sample")
 <br>4.4<br>
 ![TSnackbar](images/SnackbarK.gif "4.4 sample")
