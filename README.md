@@ -148,7 +148,7 @@
 <a href="https://github.com/hongyangAndroid/ColorfulStatusBar" target="_blank">ColorfulStatusBar</a>
 <br>
 <a href="https://github.com/google/iosched" target="_blank">iosched</a>
-<a href="https://github.com/baiiu/TSnackbar">baiiu</>
+<a href="https://github.com/baiiu/TSnackbar">baiiu</a>
 
 ## License
 
