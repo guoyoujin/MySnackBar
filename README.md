@@ -4,6 +4,7 @@
 
 ## ScreenShot
 4.4之上<br>
+![TSnackbar](images/gifs.gif "5.0 sample")
 ![TSnackbar](images/gif.gif "5.0 sample")
 <br>4.4以下<br>
 ```
