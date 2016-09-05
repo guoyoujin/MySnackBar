@@ -1,10 +1,5 @@
 package com.trycatch.mysnackbar;
 
-
-/**
- * Created by baiiu on 15/12/7.
- * 提示警告类
- */
 public enum Prompt {
     /**
      * 红色,错误

@@ -7,12 +7,10 @@ import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 
 /**
  * 获得屏幕相关的辅助类
@@ -21,30 +19,6 @@ public class ScreenUtil {
     private ScreenUtil() {
         /* cannot be instantiated */
         throw new UnsupportedOperationException("cannot be instantiated");
-    }
-
-    /**
-     * 获得屏幕高度
-     *@param context
-     * @return widthPixels
-     */
-    public static int getScreenWidth(Context context) {
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics(outMetrics);
-        return outMetrics.widthPixels;
-    }
-
-    /**
-     * 获得屏幕宽度
-     * @param context
-     * @return heightPixels
-     */
-    public static int getScreenHeight(Context context) {
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics(outMetrics);
-        return outMetrics.heightPixels;
     }
 
    
@@ -69,23 +43,6 @@ public class ScreenUtil {
         return mStatusHeight;
     }
 
-    /**
-     * 获取当前屏幕截图，包含状态栏
-     * @param activity
-     * @return bp
-     */
-    public static Bitmap snapShotWithStatusBar(Activity activity) {
-        View view = activity.getWindow().getDecorView();
-        view.setDrawingCacheEnabled(true);
-        view.buildDrawingCache();
-        Bitmap bmp = view.getDrawingCache();
-        int width = getScreenWidth(activity);
-        int height = getScreenHeight(activity);
-        Bitmap bp = Bitmap.createBitmap(bmp, 0, 0, width, height);
-        view.setDrawingCacheEnabled(false);
-        view.destroyDrawingCache();
-        return bp;
-    }
 
     /**
      * 获取当前屏幕截图，不包含状态栏
