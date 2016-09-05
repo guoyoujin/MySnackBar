@@ -1,6 +1,6 @@
 ## MySnackBar
-从顶部弹出的Snackbar,用于提示用户操作信息.
-提供三种信息: SUCCESS,WARNING,ERROR
+从顶部弹出的Snackbar,基于google SnackBar的控件，SnackBar所具有的属性他都具有，用于提示用户操作信息.
+并且提供默认三种信息: SUCCESS,WARNING,ERROR
 
 ### Introduction
 适用于actionBar、toolBar、或者自己定义的布局(你只需要把需要的高度传入即可)
@@ -14,7 +14,7 @@
 4.4以下比较特殊没有覆盖到状态栏，只能覆盖actionBar，正在想办法
 ```
 
-## Example
+## Gradle Config
  first add dependences
 ```
   dependencies {
@@ -48,7 +48,7 @@
     snackBar.addIconProgressLoading(0,true,false);
     snackBar.show();
 ```
-## 使用说明
+## Instructions
 
 * 自定义属性介绍（此控件是基于google SnackBar基础上实现的，因此SnackBar所具有的属性，他都有，下面给出一些我自己用到的属性）
 
