@@ -2,6 +2,9 @@
 从顶部弹出的Snackbar,用于提示用户操作信息.
 提供三种信息: SUCCESS,WARNING,ERROR
 
+### Introduction
+适用于actionBar、toolBar、或者自己定义的布局(你只需要把需要的高度传入即可)
+
 ## ScreenShot
 4.4之上<br>
 ![TSnackbar](images/gifsss.gif "5.0 sample")
@@ -148,6 +151,7 @@
 <a href="https://github.com/hongyangAndroid/ColorfulStatusBar" target="_blank">ColorfulStatusBar</a>
 <br>
 <a href="https://github.com/google/iosched" target="_blank">iosched</a>
+<br>
 <a href="https://github.com/baiiu/TSnackbar">baiiu</a>
 
 ## License
