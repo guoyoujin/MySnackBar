@@ -37,6 +37,7 @@ import android.support.annotation.StringRes;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.SwipeDismissBehavior;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -48,6 +49,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.accessibility.AccessibilityManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
@@ -58,6 +60,8 @@ import android.widget.TextView;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+
+import static com.trycatch.mysnackbar.AnimationUtils.FAST_OUT_SLOW_IN_INTERPOLATOR;
 
 /**
  * TSnackbar provides lightweight feedback about an operation. They show a brief message at the
@@ -211,6 +215,8 @@ public final class TSnackbar {
     private int mDuration;
     private Callback mCallback;
 
+    private final AccessibilityManager mAccessibilityManager;
+
     private TSnackbar(ViewGroup parent) {
         appearDirection = APPEAR_FROM_TOP_TO_DOWN;
 
@@ -219,6 +225,8 @@ public final class TSnackbar {
         LayoutInflater inflater = LayoutInflater.from(mContext);
 
         mView = (SnackbarLayout) inflater.inflate(R.layout.view_tsnackbar_layout, mParent, false);
+        mAccessibilityManager = (AccessibilityManager)
+                mContext.getSystemService(Context.ACCESSIBILITY_SERVICE);
     }
 
     private TSnackbar(ViewGroup parent, @OverSnackAppearDirection int appearDirection) {
@@ -607,7 +615,16 @@ public final class TSnackbar {
      * Return whether this {@link TSnackbar} is currently being shown.
      */
     public boolean isShown() {
-        return mView.isShown();
+        return SnackbarManager.getInstance().isCurrent(mManagerCallback);
+
+    }
+
+    /**
+     * Returns whether this {@link TSnackbar} is currently being shown, or is queued to be
+     * shown next.
+     */
+    public boolean isShownOrQueued() {
+        return SnackbarManager.getInstance().isCurrentOrNext(mManagerCallback);
     }
 
     private final SnackbarManager.Callback mManagerCallback = new SnackbarManager.Callback() {
@@ -635,6 +652,7 @@ public final class TSnackbar {
                 behavior.setListener(new SwipeDismissBehavior.OnDismissListener() {
                     @Override
                     public void onDismiss(View view) {
+                        view.setVisibility(View.GONE);
                         dispatchDismiss(Callback.DISMISS_EVENT_SWIPE);
                     }
 
@@ -671,58 +689,88 @@ public final class TSnackbar {
                 }
             });
         }
+
+        mView.setOnAttachStateChangeListener(new SnackbarLayout.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View v) {}
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+                if (isShownOrQueued()) {
+                    // If we haven't already been dismissed then this event is coming from a
+                    // non-user initiated action. Hence we need to make sure that we callback
+                    // and keep our state up to date. We need to post the call since removeView()
+                    // will call through to onDetachedFromWindow and thus overflow.
+                    sHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            onViewHidden(Callback.DISMISS_EVENT_MANUAL);
+                        }
+                    });
+                }
+            }
+        });
+
+        if (ViewCompat.isLaidOut(mView)) {
+            if (shouldAnimate()) {
+                // If animations are enabled, animate it in
+                animateViewIn();
+            } else {
+                // Else if anims are disabled just call back now
+                onViewShown();
+            }
+        } else {
+            // Otherwise, add one of our layout change listeners and show it in when laid out
+            mView.setOnLayoutChangeListener(new SnackbarLayout.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View view, int left, int top, int right, int bottom) {
+                    mView.setOnLayoutChangeListener(null);
+
+                    if (shouldAnimate()) {
+                        // If animations are enabled, animate it in
+                        animateViewIn();
+                    } else {
+                        // Else if anims are disabled just call back now
+                        onViewShown();
+                    }
+                }
+            });
+        }
     }
 
     private void animateViewIn() {
         Animation anim;
-
         if (appearDirection == APPEAR_FROM_TOP_TO_DOWN) {
             anim = getAnimationInFromTopToDown();
         } else {
             anim = getAnimationInFromBottomToTop();
         }
-
-        anim.setInterpolator(com.trycatch.mysnackbar.AnimationUtils.FAST_OUT_SLOW_IN_INTERPOLATOR);
+        anim.setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR);
         anim.setDuration(ANIMATION_DURATION);
         anim.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationEnd(Animation animation) {
-                if (mCallback != null) {
-                    mCallback.onShown(TSnackbar.this);
-                }
-                SnackbarManager.getInstance().onShown(mManagerCallback);
+                onViewShown();
             }
 
             @Override
-            public void onAnimationStart(Animation animation) {
-            }
+            public void onAnimationStart(Animation animation) {}
 
             @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
+            public void onAnimationRepeat(Animation animation) {}
         });
         mView.startAnimation(anim);
-
-    }
-
-    private Animation getAnimationInFromTopToDown() {
-        return AnimationUtils.loadAnimation(mView.getContext(), R.anim.top_in);
-    }
-
-    private Animation getAnimationInFromBottomToTop() {
-        return AnimationUtils.loadAnimation(mView.getContext(), R.anim.design_snackbar_in);
     }
 
     private void animateViewOut(final int event) {
         Animation anim;
-
+        
         if (appearDirection == APPEAR_FROM_TOP_TO_DOWN) {
             anim = getAnimationOutFromTopToDown();
         } else {
             anim = getAnimationOutFromBottomToTop();
         }
-
-        anim.setInterpolator(com.trycatch.mysnackbar.AnimationUtils.FAST_OUT_SLOW_IN_INTERPOLATOR);
+        anim.setInterpolator(FAST_OUT_SLOW_IN_INTERPOLATOR);
         anim.setDuration(ANIMATION_DURATION);
         anim.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -731,17 +779,22 @@ public final class TSnackbar {
             }
 
             @Override
-            public void onAnimationStart(Animation animation) {
-            }
+            public void onAnimationStart(Animation animation) {}
 
             @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
+            public void onAnimationRepeat(Animation animation) {}
         });
         mView.startAnimation(anim);
-
     }
 
+
+    private Animation getAnimationInFromTopToDown() {
+        return AnimationUtils.loadAnimation(mView.getContext(), R.anim.top_in);
+    }
+
+    private Animation getAnimationInFromBottomToTop() {
+        return AnimationUtils.loadAnimation(mView.getContext(), R.anim.design_snackbar_in);
+    }
     private Animation getAnimationOutFromTopToDown() {
         return AnimationUtils.loadAnimation(mView.getContext(), R.anim.top_out);
     }
@@ -750,11 +803,18 @@ public final class TSnackbar {
         return AnimationUtils.loadAnimation(mView.getContext(), R.anim.design_snackbar_out);
     }
 
-    final void hideView(int event) {
-        if (mView.getVisibility() != View.VISIBLE || isBeingDragged()) {
-            onViewHidden(event);
-        } else {
+    final void hideView(@Callback.DismissEvent final int event) {
+        if (shouldAnimate() && mView.getVisibility() == View.VISIBLE) {
             animateViewOut(event);
+        } else {
+            // If anims are disabled or the view isn't visible, just call back now
+            onViewHidden(event);
+        }
+    }
+    private void onViewShown() {
+        SnackbarManager.getInstance().onShown(mManagerCallback);
+        if (mCallback != null) {
+            mCallback.onShown(this);
         }
     }
 
@@ -765,11 +825,17 @@ public final class TSnackbar {
         if (mCallback != null) {
             mCallback.onDismissed(this, event);
         }
-
         // Lastly, remove the view from the parent (if attached)
-        mParent.removeView(mView);
-
-        SnackbarManager.getInstance().onDismissed(mManagerCallback);
+        final ViewParent parent = mView.getParent();
+        if (parent instanceof ViewGroup) {
+            ((ViewGroup) parent).removeView(mView);
+        }
+    }
+    /**
+     * Returns true if we should animate the Snackbar view in/out.
+     */
+    private boolean shouldAnimate() {
+        return !mAccessibilityManager.isEnabled();
     }
 
     /**
@@ -791,14 +857,21 @@ public final class TSnackbar {
     public static class SnackbarLayout extends LinearLayout {
         private TextView mMessageView;
         private Button mActionView;
+
         private int mMaxWidth;
         private int mMaxInlineActionWidth;
 
         interface OnLayoutChangeListener {
-            public void onLayoutChange(View view, int left, int top, int right, int bottom);
+            void onLayoutChange(View view, int left, int top, int right, int bottom);
+        }
+
+        interface OnAttachStateChangeListener {
+            void onViewAttachedToWindow(View v);
+            void onViewDetachedFromWindow(View v);
         }
 
         private OnLayoutChangeListener mOnLayoutChangeListener;
+        private OnAttachStateChangeListener mOnAttachStateChangeListener;
 
         public SnackbarLayout(Context context) {
             this(context, null);
@@ -820,6 +893,10 @@ public final class TSnackbar {
             // in the layout since older versions of the Android do not inflate includes with
             // the correct Context.
             LayoutInflater.from(context).inflate(R.layout.view_tsnackbar_layout_include, this);
+            ViewCompat.setAccessibilityLiveRegion(this,
+                    ViewCompat.ACCESSIBILITY_LIVE_REGION_POLITE);
+            ViewCompat.setImportantForAccessibility(this,
+                    ViewCompat.IMPORTANT_FOR_ACCESSIBILITY_YES);
         }
 
         @Override
@@ -896,9 +973,29 @@ public final class TSnackbar {
                 mOnLayoutChangeListener.onLayoutChange(this, l, t, r, b);
             }
         }
+        
+        @Override
+        protected void onAttachedToWindow() {
+            super.onAttachedToWindow();
+            if (mOnAttachStateChangeListener != null) {
+                mOnAttachStateChangeListener.onViewAttachedToWindow(this);
+            }
+        }
+
+        @Override
+        protected void onDetachedFromWindow() {
+            super.onDetachedFromWindow();
+            if (mOnAttachStateChangeListener != null) {
+                mOnAttachStateChangeListener.onViewDetachedFromWindow(this);
+            }
+        }
 
         void setOnLayoutChangeListener(OnLayoutChangeListener onLayoutChangeListener) {
             mOnLayoutChangeListener = onLayoutChangeListener;
+        }
+
+        void setOnAttachStateChangeListener(OnAttachStateChangeListener listener) {
+            mOnAttachStateChangeListener = listener;
         }
 
         private boolean updateViewsWithinLayout(final int orientation,
@@ -930,9 +1027,15 @@ public final class TSnackbar {
 
     final class Behavior extends SwipeDismissBehavior<SnackbarLayout> {
         @Override
-        public boolean onInterceptTouchEvent(CoordinatorLayout parent, SnackbarLayout child, MotionEvent event) {
-            // We want to make sure that we disable any TSnackbar timeouts if the user is
-            // currently touching the TSnackbar. We restore the timeout when complete
+        public boolean canSwipeDismissView(View child) {
+            return child instanceof SnackbarLayout;
+        }
+
+        @Override
+        public boolean onInterceptTouchEvent(CoordinatorLayout parent, SnackbarLayout child,
+                                             MotionEvent event) {
+            // We want to make sure that we disable any Snackbar timeouts if the user is
+            // currently touching the Snackbar. We restore the timeout when complete
             if (parent.isPointInChildBounds(child, (int) event.getX(), (int) event.getY())) {
                 switch (event.getActionMasked()) {
                     case MotionEvent.ACTION_DOWN:
@@ -944,6 +1047,7 @@ public final class TSnackbar {
                         break;
                 }
             }
+
             return super.onInterceptTouchEvent(parent, child, event);
         }
     }
