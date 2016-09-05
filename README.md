@@ -2,6 +2,13 @@
 从顶部弹出的Snackbar,用于提示用户操作信息.
 提供三种信息: SUCCESS,WARNING,ERROR
 
+## ScreenShot
+4.4之上<br>
+![TSnackbar](images/gif.gif "5.0 sample")
+<br>4.4以下<br>
+```
+4.4以下比较特殊没有覆盖到状态栏，只能覆盖actionBar，正在想办法
+```
 
 ## Example
  first add dependences
@@ -135,12 +142,6 @@
     
 ```
 
-
-## ScreenShot
-4.4之上<br>
-![TSnackbar](images/gif.gif "5.0 sample")
-<br>4.4以下<br>
-![TSnackbar](images/Snackbar.gif "4.4 sample")
 
 ## Thanks To
 <a href="https://github.com/hongyangAndroid/ColorfulStatusBar" target="_blank">ColorfulStatusBar</a>
