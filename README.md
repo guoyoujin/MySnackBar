@@ -24,128 +24,43 @@
 
 ## use
 ```
-    public class MainActivity extends BaseActivity {
-        private TSnackbar snackBar;
-        private Handler mHandler = new Handler() {
-            @Override
-            public void handleMessage(Message msg) {
-                // TODO Auto-generated method stub
-                super.handleMessage(msg);
-                switch (msg.what) {
-                    case 0:
-                        if(snackBar!=null){
-                            snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("登录成功").setDuration(TSnackbar.LENGTH_LONG).show();
-    
-                        }
-                        break;
-                    case 1:
-                        if(snackBar!=null) {
-                            snackBar.setPromptThemBackground(Prompt.ERROR).setText("登录失败").setDuration(TSnackbar.LENGTH_LONG).show();
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-        };;
-        Runnable gotoLoginActSuccess = new Runnable() {
-            @Override
-            public void run() {
-                Message msg = new Message();
-                msg.what = 0;
-                mHandler.sendMessage(msg);
-            }
-        };
-        Runnable gotoLoginActFail = new Runnable() {
-            @Override
-            public void run() {
-                Message msg = new Message();
-                msg.what = 1;
-                mHandler.sendMessage(msg);
-            }
-        };
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_main);
-        }
-        public void onClick(View v) throws InterruptedException {
-            final ViewGroup viewGroup = (ViewGroup) findViewById(android.R.id.content).getRootView();
-            switch (v.getId()) {
-                case R.id.success:
-                    snackBar = TSnackbar.make(viewGroup, "成功...", TSnackbar.LENGTH_SHORT, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
-                    snackBar.setAction("取消", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-    
-                        }
-                    });
-                    snackBar.setPromptThemBackground(Prompt.SUCCESS);
-                    snackBar.show();
-                    break;
-                case R.id.error:
-                    snackBar = TSnackbar.make(viewGroup, "错误...", TSnackbar.LENGTH_LONG, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
-                    snackBar.addIcon(R.mipmap.ic_launcher,100,100);
-                    snackBar.setAction("取消", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-    
-                        }
-                    });
-                    snackBar.setPromptThemBackground(Prompt.ERROR);
-                    snackBar.show();
-                    break;
-                case R.id.warning:
-                    snackBar = TSnackbar.make(viewGroup, "警告...", TSnackbar.LENGTH_LONG, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
-                    snackBar.addIcon(R.mipmap.ic_launcher,100,100);
-                    snackBar.setAction("取消", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-    
-                        }
-                    });
-                    snackBar.setPromptThemBackground(Prompt.WARNING);
-                    snackBar.show();
-                    break;
-                case R.id.loginSuccess:
-                    snackBar = TSnackbar.make(viewGroup, "正在登录，请稍后...", TSnackbar.LENGTH_INDEFINITE, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
-                    snackBar.setAction("取消", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-    
-                        }
-                    });
-                    snackBar.setPromptThemBackground(Prompt.SUCCESS);
-                    snackBar.addIconProgressLoading(0,true,false);
-                    snackBar.show();
-                    mHandler.postDelayed(gotoLoginActSuccess, 5000);
-                    break;
-                case R.id.loginFail:
-                    snackBar = TSnackbar.make(viewGroup, "正在登录，请稍后...", TSnackbar.LENGTH_INDEFINITE, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
-                    snackBar.setAction("取消", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-    
-                        }
-                    });
-                    snackBar.setPromptThemBackground(Prompt.SUCCESS);
-                    snackBar.addIconProgressLoading(0,true,false);
-                    snackBar.show();
-                    mHandler.postDelayed(gotoLoginActFail, 5000);
-                    break;
-                default:
-                    
-            }
-        }
-    
-        @Override protected void onDestroy() {
-            super.onDestroy();
-            
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && android.os.Build.VERSION.SDK_INT<=Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
     }
-    
-```
+    final ViewGroup viewGroup = (ViewGroup) findViewById(android.R.id.content).getRootView();//注意getRootView()最为重要，直接关系到TSnackBar的位置
+    snackBar.setPromptThemBackground(Prompt.SUCCESS).setText("登录成功").setDuration(TSnackbar.LENGTH_LONG).show();
+    snackBar.setPromptThemBackground(Prompt.ERROR).setText("登录失败").setDuration(TSnackbar.LENGTH_LONG).show();
+    TSnackbar.make(viewGroup, "网络已连接", TSnackbar.LENGTH_LONG, TSnackbar.APPEAR_FROM_TOP_TO_DOWN).setPromptThemBackground(Prompt.SUCCESS).show();
+    TSnackbar.make(viewGroup, "网络未连接", TSnackbar.LENGTH_LONG, TSnackbar.APPEAR_FROM_TOP_TO_DOWN).setPromptThemBackground(Prompt.WARNING).show();
+    TSnackbar snackBar = TSnackbar.make(viewGroup, "正在加载中...", TSnackbar.LENGTH_INDEFINITE, TSnackbar.APPEAR_FROM_TOP_TO_DOWN);
+    snackBar.setAction("取消", new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
 
+        }
+    });
+    snackBar.setPromptThemBackground(Prompt.SUCCESS);
+    snackBar.addIconProgressLoading(0,true,false);
+    snackBar.show();
+```
+## 使用说明
+
+* 自定义属性介绍（此控件是基于google SnackBar基础上实现的，因此SnackBar所具有的属性，他都有，下面给出一些我自己用到的属性）
+
+name | 说明
+-----|------
+setMinHeight(int stateBarHeight,int actionBarHeight)| 状态栏高度，actionBar高度
+addIcon(int resource_id)        |     图片资源
+addIcon(int resource_id, int width, int height)    |图片资源以及大小
+addIconProgressLoading(int resource_id,boolean left,boolean right)   | 加载动画样式
+addIconProgressLoading(Drawable drawable,boolean left,boolean right)    | 加载动画样式
+setPromptThemBackground(Prompt prompt)    | 默认三种样式（Prompt.ERROR,Prompt.WARNING,Prompt.SUCCESS）
+setBackgroundColor    |  设置背景颜色
 
 ## Thanks To
 <a href="https://github.com/hongyangAndroid/ColorfulStatusBar" target="_blank">ColorfulStatusBar</a>
