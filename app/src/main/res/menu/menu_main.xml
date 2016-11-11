@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
+
+    <item android:id="@+id/style0"
+        android:title="TOP"
+        android:orderInCategory="70"
+        app:showAsAction="never" />
+
+    <item android:id="@+id/style1"
+        android:title="Bottom"
+        android:orderInCategory="80"
+        app:showAsAction="never" />
+
+</menu>

@@ -190,7 +190,7 @@ public final class TSnackbar {
 
     private
     @OverSnackAppearDirection
-    int appearDirection;
+    int appearDirection = APPEAR_FROM_TOP_TO_DOWN;
 
     static {
         sHandler = new Handler(Looper.getMainLooper(), new Handler.Callback() {
@@ -223,15 +223,28 @@ public final class TSnackbar {
         mParent = parent;
         mContext = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(mContext);
-
-        mView = (SnackbarLayout) inflater.inflate(R.layout.view_tsnackbar_layout, mParent, false);
+        if(appearDirection == APPEAR_FROM_BOTTOM_TO_TOP){
+            mView = (SnackbarLayout) inflater.inflate(R.layout.view_bsnackbar_layout, mParent, false);
+        }else{
+            mView = (SnackbarLayout) inflater.inflate(R.layout.view_tsnackbar_layout, mParent, false);
+        }
         mAccessibilityManager = (AccessibilityManager)
                 mContext.getSystemService(Context.ACCESSIBILITY_SERVICE);
+        
     }
 
     private TSnackbar(ViewGroup parent, @OverSnackAppearDirection int appearDirection) {
-        this(parent);
         this.appearDirection = appearDirection;
+        mParent = parent;
+        mContext = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(mContext);
+        if(appearDirection == APPEAR_FROM_BOTTOM_TO_TOP){
+            mView = (SnackbarLayout) inflater.inflate(R.layout.view_bsnackbar_layout, mParent, false);
+        }else{
+            mView = (SnackbarLayout) inflater.inflate(R.layout.view_tsnackbar_layout, mParent, false);
+        }
+        mAccessibilityManager = (AccessibilityManager)
+                mContext.getSystemService(Context.ACCESSIBILITY_SERVICE);
         if(appearDirection == APPEAR_FROM_TOP_TO_DOWN) {
             setMinHeight(0,0);
         }

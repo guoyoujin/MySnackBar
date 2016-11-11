@@ -18,7 +18,7 @@
  first add dependences
 ```
   dependencies {
-    compile 'com.trycatch.android:mysnackbar:1.1.11'
+    compile 'com.trycatch.android:mysnackbar:1.2.1'
   }
 ```
 
