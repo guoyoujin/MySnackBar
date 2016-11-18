@@ -535,7 +535,7 @@ public final class TSnackbar {
 
     /**
      * Sets the text color of the action specified in
-     * {@link #setAction(CharSequence, View.OnClickListener)}.
+     *
      */
     @NonNull
     public TSnackbar setActionTextSize(int size) {
@@ -546,7 +546,7 @@ public final class TSnackbar {
 
     /**
      * Sets the text color of the action specified in
-     * {@link #setAction(CharSequence, View.OnClickListener)}.
+     *
      */
     @NonNull
     public TSnackbar setMessageTextSize( int size) {
@@ -559,7 +559,7 @@ public final class TSnackbar {
 
     /**
      * Sets the text color of the action specified in
-     * {@link #setAction(CharSequence, View.OnClickListener)}.
+     *
      */
     @NonNull
     public TSnackbar setActionTextColor(@ColorInt int color) {
@@ -570,7 +570,7 @@ public final class TSnackbar {
 
     /**
      * Sets the text color of the action specified in
-     * {@link #setAction(CharSequence, View.OnClickListener)}.
+     *
      */
     @NonNull
     public TSnackbar setTextColor(@ColorInt int color) {
