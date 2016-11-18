@@ -18,7 +18,7 @@
  first add dependences
 ```
   dependencies {
-    compile 'com.trycatch.android:mysnackbar:1.2.1'
+    compile 'com.trycatch.android:mysnackbar:1.2.2'
   }
 ```
 
@@ -61,7 +61,10 @@ addIconProgressLoading(int resource_id,boolean left,boolean right)   | 加载动
 addIconProgressLoading(Drawable drawable,boolean left,boolean right)    | 加载动画样式
 setPromptThemBackground(Prompt prompt)    | 默认三种样式（Prompt.ERROR,Prompt.WARNING,Prompt.SUCCESS）
 setBackgroundColor    |  设置背景颜色
-
+setActionTextColor()    |  设置button按钮字体颜色
+setActionTextSize()    |  设置button按钮字体大小
+setMessageTextSize    |  设置提示语按钮字体大小
+setMessageTextColor    |  设置提示语按钮字颜色   
 ## Thanks To
 <a href="https://github.com/hongyangAndroid/ColorfulStatusBar" target="_blank">ColorfulStatusBar</a>
 <br>

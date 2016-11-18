@@ -33,6 +33,7 @@ import android.os.Message;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
+import android.support.annotation.Size;
 import android.support.annotation.StringRes;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.SwipeDismissBehavior;
@@ -527,8 +528,8 @@ public final class TSnackbar {
      */
     @NonNull
     public TSnackbar setActionTextColor(ColorStateList colors) {
-        final TextView tv = mView.getActionView();
-        tv.setTextColor(colors);
+        final Button btn = mView.getActionView();
+        btn.setTextColor(colors);
         return this;
     }
 
@@ -537,9 +538,77 @@ public final class TSnackbar {
      * {@link #setAction(CharSequence, View.OnClickListener)}.
      */
     @NonNull
+    public TSnackbar setActionTextSize(int size) {
+        final Button btn = mView.getActionView();
+        btn.setTextSize(size);
+        return this;
+    }
+
+    /**
+     * Sets the text color of the action specified in
+     * {@link #setAction(CharSequence, View.OnClickListener)}.
+     */
+    @NonNull
+    public TSnackbar setMessageTextSize( int size) {
+        final TextView tv = mView.getMessageView();
+        tv.setTextSize(size);
+        return this;
+    }
+
+
+
+    /**
+     * Sets the text color of the action specified in
+     * {@link #setAction(CharSequence, View.OnClickListener)}.
+     */
+    @NonNull
     public TSnackbar setActionTextColor(@ColorInt int color) {
-        final TextView tv = mView.getActionView();
+        final Button btn = mView.getActionView();
+        btn.setTextColor(color);
+        return this;
+    }
+
+    /**
+     * Sets the text color of the action specified in
+     * {@link #setAction(CharSequence, View.OnClickListener)}.
+     */
+    @NonNull
+    public TSnackbar setTextColor(@ColorInt int color) {
+        setActionTextColor(color);
+        setMessageTextColor(color);
+        return this;
+    }
+
+    /**
+     * Sets the text color of the action specified in
+     * {@link #setAction(CharSequence, View.OnClickListener)}.
+     */
+    @NonNull
+    public TSnackbar setColor(ColorStateList colors) {
+        setActionTextColor(colors);
+        setMessageTextColor(colors);
+        return this;
+    }
+
+    /**
+     * Sets the text color of the action specified in
+     * {@link #setAction(CharSequence, View.OnClickListener)}.
+     */
+    @NonNull
+    public TSnackbar setMessageTextColor(@ColorInt int color) {
+        final TextView tv = mView.getMessageView();
         tv.setTextColor(color);
+        return this;
+    }
+
+    /**
+     * Sets the text color of the action specified in
+     * {@link #setAction(CharSequence, View.OnClickListener)}.
+     */
+    @NonNull
+    public TSnackbar setMessageTextColor(ColorStateList colors) {
+        final TextView tv = mView.getMessageView();
+        tv.setTextColor(colors);
         return this;
     }
 

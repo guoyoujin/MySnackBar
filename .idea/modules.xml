@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/MyCustomSnackBar.iml" filepath="$PROJECT_DIR$/MyCustomSnackBar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MySnackBar.iml" filepath="$PROJECT_DIR$/MySnackBar.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/mysnackbar/mysnackbar.iml" filepath="$PROJECT_DIR$/mysnackbar/mysnackbar.iml" />
     </modules>
